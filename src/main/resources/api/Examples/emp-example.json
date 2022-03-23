@@ -1,0 +1,10 @@
+{
+  "firstName": "AAA",
+  "lastName": "BBB",
+  "email": "abc@gmail.com",
+  "phoneNumber": "123456789",
+  "Designation": "Consultant",
+  "Specialization": "Java Developer",
+  "country": "India",
+  "city": "Amravati"
+}

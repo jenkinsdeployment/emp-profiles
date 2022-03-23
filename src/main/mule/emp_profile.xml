@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+    <http:listener-config name="emp_profile-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8086" />
+    </http:listener-config>
+    <apikit:config name="emp_profile-config" api="emp_profile.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <configuration doc:name="Configuration" doc:id="e6de957b-caa0-4da2-b79b-33e15efb7132" defaultErrorHandler-ref="global_ErrorHandler" />
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="81c32fff-c1f7-44d4-a641-aa5edce64851" >
+		<salesforce:basic-connection username="prajwal16mule@gmail.com" password="Morshi@2021" securityToken="cu2ptyr9yia36gwxlvrZQi5M" />
+	</salesforce:sfdc-config>
+	<flow name="emp_profile-main">
+        <http:listener config-ref="emp_profile-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="emp_profile-config" />
+		<error-handler ref="global_ErrorHandler" />
+    
+    </flow>
+    <flow name="emp_profile-console">
+        <http:listener config-ref="emp_profile-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="emp_profile-config" />
+		<error-handler ref="global_ErrorHandler" />
+    </flow>
+    <flow name="patch:\emp\(empId):application\json:emp_profile-config">
+        <ee:transform doc:name="Transform Message" doc:id="6daa86d3-7341-4bb5-a5a3-74bfdf09740c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[{
+  Name : attributes.uriParams.empId,
+  firstName__c : payload.firstName,
+  lastName__c : payload.lastName,
+  email__c : payload.email,
+  phoneNumber__c : payload.phoneNumber,
+  Designation__c : payload.Designation,
+  Specialization__c : payload.Specialization,
+  country__c : payload.country,			
+  city__c : payload.city			
+}]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:upsert doc:name="Upsert" doc:id="28719cfb-82b0-4cbb-8ee7-77d25a8e21fc" config-ref="Salesforce_Config" objectType="emp_profiles__c" externalIdFieldName="Name"/>
+		<ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  msg: "successful operation",
+  code: 200,
+  success: "true"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\emp:emp_profile-config">
+        <salesforce:query doc:name="Query" doc:id="1983b7ef-9b08-4605-9daf-469d8e4ce92b" config-ref="Salesforce_Config">
+			<salesforce:salesforce-query ><![CDATA[select Name,firstName__c,lastName__c,phoneNumber__c,email__c,country__c,city__c,
+Designation__c,Specialization__c from emp_profiles__c]]></salesforce:salesforce-query>
+		</salesforce:query>
+		<ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+empList : payload map (item, index)->
+{
+  firstName : item.firstName__c,
+  lastName : item.lastName__c,
+  email : item.email__c,
+  phoneNumber : item.phoneNumber__c,
+  Designation : item.Designation__c,
+  Specialization : item.Specialization__c,
+  country : item.country__c,			
+  city : item.city__c
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\emp\(empId):emp_profile-config">
+        <salesforce:query doc:name="Query" doc:id="c5e0236b-1418-457c-af26-1f60898e9064" config-ref="Salesforce_Config">
+			<salesforce:salesforce-query ><![CDATA[select Name,firstName__c,lastName__c,phoneNumber__c,email__c,country__c,city__c,
+Designation__c,Specialization__c from emp_profiles__c where name = ':empId']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	"empId" : attributes.uriParams.empId
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  firstName: payload[0].firstName__c,
+  lastName: payload[0].lastName__c,
+  email: payload[0].email__c,
+  phoneNumber: payload[0].phoneNumber__c,
+  Designation: payload[0].Designation__c,
+  Specialization: payload[0].Specialization__c,
+  country: payload[0].country__c,
+  city: payload[0].city__c
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\emp:application\json:emp_profile-config">
+        <ee:transform doc:name="Transform Message" doc:id="0d9a8f02-d08f-486b-bd2a-a50ae9ac40d6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[{
+  firstName__c : payload.firstName,
+  lastName__c : payload.lastName,
+  email__c : payload.email,
+  phoneNumber__c : payload.phoneNumber,
+  Designation__c : payload.Designation,
+  Specialization__c : payload.Specialization,
+  country__c : payload.country,			
+  city__c : payload.city			
+}]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create doc:name="Create" doc:id="c0a99324-8b96-4ae9-8396-e0cb9d1d9c5e" config-ref="Salesforce_Config" type="emp_profiles__c"/>
+		<ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  msg: "successful operation",
+  code: 200,
+  success: "true"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>

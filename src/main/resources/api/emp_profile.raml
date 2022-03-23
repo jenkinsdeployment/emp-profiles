@@ -1,0 +1,150 @@
+#%RAML 1.0
+title: emp_profile
+description: Employee profile management.
+
+/emp:
+  /{empId}:
+    get:
+      description: This API will fetch specific employee profile from SFDC.
+      responses:
+        200:
+          body:
+            application/json:
+              type: !include /DataType/emp-dataType.raml
+              example: !include /Examples/emp-example.json 
+        400:
+          body:
+            application/json:
+              description: This element will define status of failed messages.
+              type: !include Error/error-dataType.raml
+              example: !include /Examples/error-400-response-example.json
+        401:
+          body:
+            application/json:
+              description: This element will define status of failed messages.
+              type: !include Error/error-dataType.raml
+              example: !include /Examples/error-401-response-example.json
+        404:
+          body:
+            application/json:
+              description: This element will define status of failed messages.
+              type: !include Error/error-dataType.raml
+              example: !include /Examples/error-404-response-example.json
+        500:
+          body:
+            application/json:
+              description: This element will define status of failed messages.
+              type: !include Error/error-dataType.raml
+              example: !include /Examples/error-500-response-example.json
+    patch:
+      description: This API will update employee details.
+      body:
+        application/json:
+          type: !include /DataType/emp-dataType.raml
+          example: !include /Examples/emp-example.json
+      responses:
+        200:
+          body:
+            application/json:
+              type: !include /DataType/emp-post-dataType.raml
+              example: !include /Examples/post-200-response.json
+        400:
+          body:
+            application/json:
+              description: This element will define status of failed messages.
+              type: !include Error/error-dataType.raml
+              example: !include /Examples/error-400-response-example.json
+        401:
+          body:
+            application/json:
+              description: This element will define status of failed messages.
+              type: !include Error/error-dataType.raml
+              example: !include /Examples/error-401-response-example.json
+        404:
+          body:
+            application/json:
+              description: This element will define status of failed messages.
+              type: !include Error/error-dataType.raml
+              example: !include /Examples/error-404-response-example.json
+        500:
+          body:
+            application/json:
+              description: This element will define status of failed messages.
+              type: !include Error/error-dataType.raml
+              example: !include /Examples/error-500-response-example.json          
+
+  post:
+    description: This API will do employee registration to SFDC. 
+    body:
+      application/json:
+        type: !include /DataType/emp-dataType.raml
+        example: !include /Examples/emp-example.json
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include /DataType/emp-post-dataType.raml
+            example: !include /Examples/post-200-response.json
+      400:
+          body:
+            application/json:
+              description: This element will define status of failed messages.
+              type: !include Error/error-dataType.raml
+              example: !include /Examples/error-400-response-example.json
+      401:
+        body:
+          application/json:
+            description: This element will define status of failed messages.
+            type: !include Error/error-dataType.raml
+            example: !include /Examples/error-401-response-example.json
+      404:
+        body:
+          application/json:
+            description: This element will define status of failed messages.
+            type: !include Error/error-dataType.raml
+            example: !include /Examples/error-404-response-example.json
+      500:
+        body:
+          application/json:
+            description: This element will define status of failed messages.
+            type: !include Error/error-dataType.raml
+            example: !include /Examples/error-500-response-example.json
+
+  get:
+    description: This API will fetch all emp details from SFDC
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            properties:
+              memberList:
+                required: true
+                type: array
+                items:
+                  type: !include /DataType/emp-dataType.raml
+                  example: !include /Examples/emp-example.json
+      400:
+          body:
+            application/json:
+              description: This element will define status of failed messages.
+              type: !include Error/error-dataType.raml
+              example: !include /Examples/error-400-response-example.json
+      401:
+        body:
+          application/json:
+            description: This element will define status of failed messages.
+            type: !include Error/error-dataType.raml
+            example: !include /Examples/error-401-response-example.json
+      404:
+        body:
+          application/json:
+            description: This element will define status of failed messages.
+            type: !include Error/error-dataType.raml
+            example: !include /Examples/error-404-response-example.json
+      500:
+        body:
+          application/json:
+            description: This element will define status of failed messages.
+            type: !include Error/error-dataType.raml
+            example: !include /Examples/error-500-response-example.json            

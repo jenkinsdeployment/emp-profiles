@@ -1,0 +1,33 @@
+#%RAML 1.0 DataType
+
+type: object
+description: This element will define status of failed messages.
+properties:
+  msg:
+    type: string
+    required: true
+    example: "failed"
+  code:
+    type: integer
+    required: true
+    example: 400
+  success:
+    type: boolean
+    required: true
+    example: false
+  error:
+    type: object
+    required: true
+    properties:
+      'type':
+        type: string
+        required: true
+        example: "BAD_REQUEST"
+      title:
+        type: string
+        required: true
+        example: "Invalid Request"
+      details:
+        type: string
+        required: true
+        example: "The input contains invalid data"
