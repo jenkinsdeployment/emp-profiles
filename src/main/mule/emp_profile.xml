@@ -2,13 +2,14 @@
 <mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
 http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
     <http:listener-config name="emp_profile-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8086" />
+        <http:listener-connection host="0.0.0.0" port="${http.port}" />
     </http:listener-config>
     <apikit:config name="emp_profile-config" api="emp_profile.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <configuration doc:name="Configuration" doc:id="e6de957b-caa0-4da2-b79b-33e15efb7132" defaultErrorHandler-ref="global_ErrorHandler" />
 	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="81c32fff-c1f7-44d4-a641-aa5edce64851" >
 		<salesforce:basic-connection username="prajwal16mule@gmail.com" password="Morshi@2021" securityToken="cu2ptyr9yia36gwxlvrZQi5M" />
 	</salesforce:sfdc-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="fcc4d96b-a76a-421a-96eb-4b2f61140edc" file="secure.yaml" />
 	<flow name="emp_profile-main">
         <http:listener config-ref="emp_profile-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
