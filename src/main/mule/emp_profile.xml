@@ -65,7 +65,7 @@ output application/json
 {
   msg: "successful operation",
   code: 200,
-  success: "true"
+  success: "true."
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
