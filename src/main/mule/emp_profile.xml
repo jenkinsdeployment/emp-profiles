@@ -5,7 +5,8 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
     <http:listener-config name="emp_profile-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="${http.port}" />
     </http:listener-config>
-    <apikit:config name="emp_profile-config" api="emp_profile.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="emp_profile-config" api="emp_profile.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" >
+	</apikit:config>
     <configuration doc:name="Configuration" doc:id="e6de957b-caa0-4da2-b79b-33e15efb7132" defaultErrorHandler-ref="global_ErrorHandler" />
 	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="81c32fff-c1f7-44d4-a641-aa5edce64851" >
 		<salesforce:basic-connection username="prajwal16mule@gmail.com" password="Morshi@2020" securityToken="ao1LyltCH10rw8iZh8Km9Lubq" />
@@ -156,4 +157,17 @@ output application/json
             </ee:message>
         </ee:transform>
     </flow>
+	<flow name="get:\status:emp_profile-config" doc:id="afc5fe61-bb08-4861-819b-91d22059e00d" >
+		<ee:transform doc:name="Transform Message" doc:id="94a5e58f-c766-4565-96c6-f7c670ec171e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	status: 200,
+	msg: "API is up and running."
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
 </mule>

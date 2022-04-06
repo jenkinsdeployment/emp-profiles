@@ -147,4 +147,14 @@ description: Employee profile management.
           application/json:
             description: This element will define status of failed messages.
             type: !include Error/error-dataType.raml
-            example: !include /Examples/error-500-response-example.json            
+            example: !include /Examples/error-500-response-example.json   
+            
+/status:
+  get:
+    description: This will show api status.
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include /DataType/emp-status-dataType.raml
+            example: !include /Examples/emp-status-response.json                              
