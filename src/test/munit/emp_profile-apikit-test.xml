@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd http://www.mulesoft.org/schema/mule/munit-tools http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd ">
+    <munit:config name="emp_profile-apikit-test.xml" />
+    <http:request-config name="HTTP_Request_Configuration" basePath="/api">
+        <http:request-connection host="localhost" port="8086" />
+    </http:request-config>
+    <munit:test name="get:\emp:emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [get:\emp:emp_profile-config-200-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="get:\emp:emp_profile-config" />
+        </munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="8a9ffbc6-028b-450f-8cb7-0b42e3524006" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="1983b7ef-9b08-4605-9daf-469d8e4ce92b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://GETLIST\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Event" doc:id="76b240e5-7d7d-4c9e-b049-ab9d123958c0" >
+				<munit:payload value="#[readUrl('classpath://GETLIST\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://GETLIST\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow Reference" doc:id="017bc5b7-179f-4c55-bedb-3c40562fc0ae" name="get:\emp:emp_profile-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="eb517c14-e904-403c-af17-b4635a606106" message="Payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import GETLIST::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify call" doc:id="72aa34a2-3cc3-49aa-999d-49814ef78df4" processor="salesforce:query" atLeast="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="1983b7ef-9b08-4605-9daf-469d8e4ce92b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+    </munit:test>
+    <munit:test name="get:\emp:emp_profile-config-404-application\json-FlowTest" description="Verifying functionality of [get:\emp:emp_profile-config-404-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="get:\emp:emp_profile-config" />
+        </munit:enable-flow-sources>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/emp1" responseTimeout="200000">
+                <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="404" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 404" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_404_emp_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\emp:emp_profile-config-405-application\json-FlowTest" description="Verifying functionality of [get:\emp:emp_profile-config-500-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="get:\emp:emp_profile-config" />
+        </munit:enable-flow-sources>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="PATCH" path="/emp" responseTimeout="2000000">
+                <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="405" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(405)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 405" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_405_emp_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="post:\emp:application\json:emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [post:\emp:application\json:emp_profile-config-200-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="post:\emp:application\json:emp_profile-config" />
+        </munit:enable-flow-sources>
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="764d9575-1d25-4fb7-81f9-12e5b658cfc9" processor="salesforce:create">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="c0a99324-8b96-4ae9-8396-e0cb9d1d9c5e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://POST200\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Event" doc:id="c791d400-f8f2-4f83-8a97-60f3d8deac69" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://POST200\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://POST200\set-event_attributes.dwl')]" />
+			</munit:set-event>
+        </munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="Flow Reference" doc:id="12df072e-c567-46fa-8680-00cfb910a2a8" name="post:\emp:application\json:emp_profile-config"/>
+        </munit:execution>
+		<munit:validation>
+			<munit-tools:assert doc:name="Assert expression" doc:id="a47708e8-68c8-486d-8ece-16e2d2ad98ae" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import POST200::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify call" doc:id="f7b82493-be11-4dde-86b0-a2707d031f23" processor="salesforce:create" atLeast="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="c0a99324-8b96-4ae9-8396-e0cb9d1d9c5e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+        </munit:validation>
+    </munit:test>
+    <munit:test name="post:\emp:application\json:emp_profile-config-400-application\json-FlowTest" description="Verifying functionality of [post:\emp:application\json:emp_profile-config-400-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="post:\emp:application\json:emp_profile-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-payload value="#[output application/json --- readUrl('classpath://scaffolder/request/post_emp_400_application_json.json')]" />
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="POST" path="/emp" responseTimeout="200000">
+                <http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="400" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(400)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 400" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/post_400_emp_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="post:\emp:application\json:emp_profile-config-404-application\json-FlowTest" description="Verifying functionality of [post:\emp:application\json:emp_profile-config-404-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="post:\emp:application\json:emp_profile-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-payload value="#[output application/json --- readUrl('classpath://scaffolder/request/post_emp_200_application_json.json')]" />
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="POST" path="/emp1" responseTimeout="200000">
+                <http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="404" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 404" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/post_404_emp_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+	<munit:test name="post:\emp:application\json:emp_profile-config-405-application\json-FlowTest" description="Verifying functionality of [post:\emp:application\json:emp_profile-config-404-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="post:\emp:application\json:emp_profile-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<set-payload value="#[output application/json --- readUrl('classpath://scaffolder/request/post_emp_200_application_json.json')]" />
+        </munit:behavior>
+		<munit:execution>
+			<http:request method="PATCH" doc:name="Request" doc:id="417a914e-ac2b-4252-bd0f-1df1c8356eb4" config-ref="HTTP_Request_Configuration" path="/emp" responseTimeout="200000">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+				<http:response-validator>
+					<http:success-status-code-validator values="405" />
+				</http:response-validator>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(405)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 405" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/post_405_emp_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+	<munit:test name="patch:\emp\(empId):application\json:emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [patch:\emp\(empId):application\json:emp_profile-config-200-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="patch:\emp\(empId):application\json:emp_profile-config" />
+        </munit:enable-flow-sources>
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="29bfc634-4b43-4709-aabe-2e2485effd63" processor="salesforce:upsert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="28719cfb-82b0-4cbb-8ee7-77d25a8e21fc" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://PATCH200\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Event" doc:id="927d1597-2301-4ca4-8977-c1bf0e1f8fdb" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://PATCH200\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://PATCH200\set-event_attributes.dwl')]" />
+			</munit:set-event>
+        </munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="Flow Reference" doc:id="98d91e3f-b321-4123-91fb-05a22846b2cc" name="patch:\emp\(empId):application\json:emp_profile-config"/>
+        </munit:execution>
+		<munit:validation>
+			<munit-tools:assert doc:name="Assert expression" doc:id="3751da6b-9394-465b-8da5-b874b036688c" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import PATCH200::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify call" doc:id="87c29c53-928b-42ae-922f-f15066aa2567" processor="salesforce:upsert" atLeast="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="28719cfb-82b0-4cbb-8ee7-77d25a8e21fc" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+        </munit:validation>
+    </munit:test>
+    <munit:test name="patch:\emp\(empId):application\json:emp_profile-config-400-application\json-FlowTest" description="Verifying functionality of [patch:\emp\(empId):application\json:emp_profile-config-400-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="patch:\emp\(empId):application\json:emp_profile-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-payload value="#[output application/json --- readUrl('classpath://scaffolder/request/patch_emp_400_application_json.json')]" />
+            <set-variable variableName="empId" value="#['null']" doc:name="empId" />
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="PATCH" path="#['/emp/$(vars.empId)']" responseTimeout="200000">
+                <http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="400" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(400)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 400" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/patch_400_emp_{empid}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="patch:\emp\(empId):application\json:emp_profile-config-404-application\json-FlowTest" description="Verifying functionality of [patch:\emp\(empId):application\json:emp_profile-config-404-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="patch:\emp\(empId):application\json:emp_profile-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-payload value="#[output application/json --- readUrl('classpath://scaffolder/request/patch_emp_{empid}_application_json.json')]" />
+            <set-variable variableName="empId" value="#['null']" doc:name="empId" />
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="PATCH" path="#['/emp/$(vars.empId)/1']">
+                <http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="404" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 404" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/patch_404_emp_{empid}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="patch:\emp\(empId):application\json:emp_profile-config-405-application\json-FlowTest" description="Verifying functionality of [patch:\emp\(empId):application\json:emp_profile-config-500-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="patch:\emp\(empId):application\json:emp_profile-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-payload value="#[output application/json --- readUrl('classpath://scaffolder/request/patch_emp_{empid}_application_json.json')]" />
+            <set-variable variableName="empId" value="#['null']" doc:name="empId" />
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="POST" path="#['/emp/$(vars.empId)']" responseTimeout="200000">
+                <http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="405" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(405)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 405" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/patch_405_emp_{empid}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\status:emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [get:\status:emp_profile-config-200-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="get:\status:emp_profile-config" />
+        </munit:enable-flow-sources>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/status" responseTimeout="200000">
+                <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 200" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_200_status_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\emp\(empId):emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [get:\emp\(empId):emp_profile-config-200-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="get:\emp\(empId):emp_profile-config" />
+        </munit:enable-flow-sources>
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="c4b94245-76a8-4e0f-9689-aac4f11db6f2" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="c5e0236b-1418-457c-af26-1f60898e9064" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://GET200\mock_payload.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Event" doc:id="4e24895e-fce8-4ca1-8d7a-dc8dcb515cc3" >
+				<munit:payload value="#[readUrl('classpath://GET200\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://GET200\set-event_attributes.dwl')]" />
+			</munit:set-event>
+        </munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="Flow Reference" doc:id="31c072e6-23bd-4f94-868e-aba31216ffb4" name="get:\emp\(empId):emp_profile-config"/>
+        </munit:execution>
+		<munit:validation>
+			<munit-tools:assert doc:name="Assert expression" doc:id="bffecd04-d616-43d7-b389-1c8fa33b1968" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import GET200::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify call" doc:id="b6591a94-bf54-4a15-b38e-f6a319d1eb08" processor="salesforce:query" atLeast="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="c5e0236b-1418-457c-af26-1f60898e9064" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\emp\(empId):emp_profile-config-404-application\json-FlowTest" description="Verifying functionality of [get:\emp\(empId):emp_profile-config-404-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="get:\emp\(empId):emp_profile-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-variable variableName="empId" value="#['null']" doc:name="empId" />
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="#['/emp/$(vars.empId)/1']" responseTimeout="200000">
+                <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="404" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 404" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_404_emp_{empid}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\emp\(empId):emp_profile-config-405-application\json-FlowTest" description="Verifying functionality of [get:\emp\(empId):emp_profile-config-500-application\json]" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="get:\emp\(empId):emp_profile-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-variable variableName="empId" value="#['null']" doc:name="empId" />
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="POST" path="#['/emp/$(vars.empId)']" responseTimeout="200000">
+                <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="405" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(405)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 500" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_405_emp_{empid}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="ANY_ERROR_HANDLER" timeOut="200000" expectedErrorType="ANY">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="get:\emp\(empId):emp_profile-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="4f0d4cee-f462-4d1e-b7c0-408aa3d9301d" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="emp_profile-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="ANY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+        </munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="Flow Reference" doc:id="559337c9-e500-4ffe-9a7b-36323eacdbae" name="emp_profile-main" />
+        </munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that expression="#[payload.code]" is="#[MunitTools::equalTo(500)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 500" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="APIKIT_CONSOLE" timeOut="200000">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="emp_profile-main" />
+            <munit:enable-flow-source value="get:\emp\(empId):emp_profile-config" />
+        </munit:enable-flow-sources>
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="542c12f1-66c4-4d83-bfcf-d55a43686f1b" processor="apikit:console">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="emp_profile-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+        </munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="Flow Reference" doc:id="80859a97-5d75-44f0-9821-4de9d9ce6cd2" name="emp_profile-console" />
+        </munit:execution>
+		<munit:validation>
+			<munit-tools:verify-call doc:name="Verify call" doc:id="e8165924-4832-4e9d-9e70-8314d6c5374d" processor="apikit:console" atLeast="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="emp_profile-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+        </munit:validation>
+    </munit:test>
+</mule>

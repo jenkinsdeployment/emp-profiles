@@ -3,7 +3,7 @@
 http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
 http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
     <http:listener-config name="emp_profile-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="${http.port}" />
+        <http:listener-connection host="0.0.0.0" port="8086" />
     </http:listener-config>
     <apikit:config name="emp_profile-config" api="emp_profile.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" >
 	</apikit:config>
@@ -12,22 +12,22 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 		<salesforce:basic-connection username="prajwal16mule@gmail.com" password="Morshi@2020" securityToken="ao1LyltCH10rw8iZh8Km9Lubq" />
 	</salesforce:sfdc-config>
 	<configuration-properties doc:name="Configuration properties" doc:id="fcc4d96b-a76a-421a-96eb-4b2f61140edc" file="secure.yaml" />
-	<api-gateway:autodiscovery apiId="17730786" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="7d852406-268b-401b-87ca-9b5641bd1583" flowRef="emp_profile-main" />
-	<flow name="emp_profile-main">
+	<api-gateway:autodiscovery apiId="17730786" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="7d852406-268b-401b-87ca-9b5641bd1583" flowRef="emp_profile-main"/>
+	<flow name="emp_profile-main" doc:id="375cfc8b-28ee-4168-bbcf-fd8dfb51abfc">
         <http:listener config-ref="emp_profile-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:response>
             <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="emp_profile-config" />
 		<error-handler ref="global_ErrorHandler" />
     
     </flow>
-    <flow name="emp_profile-console">
+    <flow name="emp_profile-console" doc:id="2fe35a45-c538-4c0b-b531-2cf78a3b32bc">
         <http:listener config-ref="emp_profile-httpListenerConfig" path="/console/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
@@ -40,7 +40,7 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
         <apikit:console config-ref="emp_profile-config" />
 		<error-handler ref="global_ErrorHandler" />
     </flow>
-    <flow name="patch:\emp\(empId):application\json:emp_profile-config">
+    <flow name="patch:\emp\(empId):application\json:emp_profile-config" doc:id="b80cc435-e451-4b85-ba8c-6102b2ea68b6">
         <ee:transform doc:name="Transform Message" doc:id="6daa86d3-7341-4bb5-a5a3-74bfdf09740c" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -68,12 +68,13 @@ output application/json
 {
   msg: "successful operation",
   code: 200,
-  success: "true."
+  success: "true"
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+		<error-handler ref="global_ErrorHandler" />
     </flow>
-    <flow name="get:\emp:emp_profile-config">
+    <flow name="get:\emp:emp_profile-config" doc:id="cd132d14-4750-4e77-bfb2-e7405d56b28b">
         <salesforce:query doc:name="Query" doc:id="1983b7ef-9b08-4605-9daf-469d8e4ce92b" config-ref="Salesforce_Config">
 			<salesforce:salesforce-query ><![CDATA[select Name,firstName__c,lastName__c,phoneNumber__c,email__c,country__c,city__c,
 Designation__c,Specialization__c from emp_profiles__c]]></salesforce:salesforce-query>
@@ -96,8 +97,9 @@ empList : payload map (item, index)->
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+		<error-handler ref="global_ErrorHandler" />
     </flow>
-    <flow name="get:\emp\(empId):emp_profile-config">
+    <flow name="get:\emp\(empId):emp_profile-config" doc:id="acc1fbfd-a104-4970-883f-7e3be00c755e">
         <salesforce:query doc:name="Query" doc:id="c5e0236b-1418-457c-af26-1f60898e9064" config-ref="Salesforce_Config">
 			<salesforce:salesforce-query ><![CDATA[select Name,firstName__c,lastName__c,phoneNumber__c,email__c,country__c,city__c,
 Designation__c,Specialization__c from emp_profiles__c where name = ':empId']]></salesforce:salesforce-query>
@@ -124,8 +126,9 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+		<error-handler ref="global_ErrorHandler" />
     </flow>
-    <flow name="post:\emp:application\json:emp_profile-config">
+    <flow name="post:\emp:application\json:emp_profile-config" doc:id="8f6ec057-49f8-4d44-a4d5-56250fc2b6bd">
         <ee:transform doc:name="Transform Message" doc:id="0d9a8f02-d08f-486b-bd2a-a50ae9ac40d6" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -156,6 +159,7 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+		<error-handler ref="global_ErrorHandler" />
     </flow>
 	<flow name="get:\status:emp_profile-config" doc:id="afc5fe61-bb08-4861-819b-91d22059e00d" >
 		<ee:transform doc:name="Transform Message" doc:id="94a5e58f-c766-4565-96c6-f7c670ec171e" >
@@ -169,5 +173,6 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<error-handler ref="global_ErrorHandler" />
 	</flow>
 </mule>
