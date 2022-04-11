@@ -10,7 +10,7 @@ pipeline
 	 
 	stage('Munit Test Application'){
 	steps{
-	bat 'mvn clean test -Dtest=emp_profile-apikit-test.xml test'
+	bat 'mvn clean test -Dmunit.test=emp_profile-apikit-test.xml test'
 	}
 	}
 	 
