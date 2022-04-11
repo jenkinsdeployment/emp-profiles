@@ -10,7 +10,7 @@ pipeline
 
 	stage('Munit Test Application'){
 	steps{
-	bat 'mvn clean -DskipTests test'
+	bat 'mvn clean test'
 	}
 	}
 	
