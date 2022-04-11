@@ -137,18 +137,6 @@
         	<url>http://repository.mulesoft.org/snapshots/</url>
         	<layout>default</layout>
     	</repository>
-    	<repository>
-    		<id>MuleRepository</id>
-			<name>MuleRepository</name>
-			<url>https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/</url>
-			<layout>default</layout>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
 	</repositories>
 
 	<pluginRepositories>
@@ -158,7 +146,7 @@
 			<layout>default</layout>
 			<url>https://repository.mulesoft.org/releases/</url>
 			<snapshots>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
