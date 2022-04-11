@@ -136,7 +136,19 @@
         	<name>MuleSoft Snapshot Repository</name>
         	<url>http://repository.mulesoft.org/snapshots/</url>
         	<layout>default</layout>
-    </repository>
+    	</repository>
+    	<repository>
+    		<id>MuleRepository</id>
+			<name>MuleRepository</name>
+			<url>https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
