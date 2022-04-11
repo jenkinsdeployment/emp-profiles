@@ -7,10 +7,16 @@ pipeline
 	bat 'mvn clean install'
 	}
 	}
+
+	stage('Munit Test Application'){
+	steps{
+	bat 'mvn --settings settings.xml clean test'
+	}
+	}
 	
 	stage('Deploy Application'){
 	steps{
-	bat 'mvn clean package deploy -DmuleDeploy -DskipTests -Dmule.version=4.4.0 -Danypoint.username=Prajwal16 -Danypoint.password=Magenta2022$# -Denv=Sandbox -Dappname=emp-profiles -DvCore=Micro -Dworkers=1 -Dbusiness.group=MuleSoft Enablement T-Systems'
+	bat 'mvn --settings settings.xml clean deploy -DmuleDeploy -DskipTests -Dmule.version=4.4.0 -Danypoint.username=Prajwal16 -Danypoint.password=Magenta2022$# -Denv=Sandbox -Dappname=emp-profiles -DvCore=Micro -Dworkers=1 -Dbusiness.group=MuleSoft Enablement T-Systems'
 	 }
 	 }
   }
