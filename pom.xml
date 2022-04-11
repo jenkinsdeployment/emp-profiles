@@ -133,7 +133,13 @@
 			<layout>default</layout>
 		</repository>
 	</repositories>
-
+	<distributionManagement>
+       <repository>
+         <id>internal.repo</id>
+         <name>Internal repo</name>
+         <url>file:///C:/Users/hp/Desktop</url>
+       </repository>
+   </distributionManagement>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>mulesoft-releases</id>
