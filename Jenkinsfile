@@ -16,7 +16,7 @@ pipeline
 	
 	stage('Deploy Application'){
 	steps{
-	bat 'mvn clean deploy -DmuleDeploy -Dmule.version=4.4.0 -Danypoint.username=PSW1 -Danypoint.password=Pr@jw@l16 -Denv=Sandbox -Dappname=emp-profiles -DvCore=Micro -Dworkers=1 -Dbusiness.group=TS -DaltDeploymentRepository=internal.repo::default::file:///C:/Users/hp/Desktop'
+	bat 'mvn clean package deploy -DskipTests -U -e -DmuleDeploy -Dmule.version=4.4.0 -Danypoint.username=Prajwal16 -Danypoint.password=Magenta2022$# -Denv=Sandbox -Dappname=emp-profile-1 -DvCore=Micro -Dworkers=1 -Dbusiness.group=T-Systems -DaltDeploymentRepository=internal.repo::default::file:///C:/Users/hp/Desktop'
 	 }
 	 }
   }
