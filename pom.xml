@@ -40,7 +40,7 @@
 						<applicationName>${appname}</applicationName>
 						<workerType>${vCore}</workerType>
 						<workers>${workers}</workers>
-						<businessGroup>${business.group}</businessGroup>
+						<businessGroupId>c6213b89-7332-45cb-9584-c93bde0b7702</businessGroupId>
 						<deploymentTimeout>${deployment.timeout}</deploymentTimeout>
 						<objectStoreV2>true</objectStoreV2>
 					</cloudHubDeployment>
