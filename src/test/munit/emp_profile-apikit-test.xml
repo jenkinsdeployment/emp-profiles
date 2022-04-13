@@ -4,7 +4,7 @@
     <http:request-config name="HTTP_Request_Configuration" basePath="/api">
         <http:request-connection host="localhost" port="8086" />
     </http:request-config>
-    <munit:test name="get:\emp:emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [get:\emp:emp_profile-config-200-application\json]" timeOut="200000" ignore="true">
+    <munit:test name="get:\emp:emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [get:\emp:emp_profile-config-200-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="get:\emp:emp_profile-config" />
@@ -40,7 +40,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
 			</munit-tools:verify-call>
 		</munit:validation>
     </munit:test>
-    <munit:test name="get:\emp:emp_profile-config-404-application\json-FlowTest" description="Verifying functionality of [get:\emp:emp_profile-config-404-application\json]" timeOut="200000" ignore="true">
+    <munit:test name="get:\emp:emp_profile-config-404-application\json-FlowTest" description="Verifying functionality of [get:\emp:emp_profile-config-404-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="get:\emp:emp_profile-config" />
@@ -58,7 +58,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
             <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_404_emp_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\emp:emp_profile-config-405-application\json-FlowTest" description="Verifying functionality of [get:\emp:emp_profile-config-500-application\json]" timeOut="200000" ignore="true">
+    <munit:test name="get:\emp:emp_profile-config-405-application\json-FlowTest" description="Verifying functionality of [get:\emp:emp_profile-config-500-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="get:\emp:emp_profile-config" />
@@ -76,7 +76,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
             <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_405_emp_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="post:\emp:application\json:emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [post:\emp:application\json:emp_profile-config-200-application\json]" timeOut="200000" ignore="true">
+    <munit:test name="post:\emp:application\json:emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [post:\emp:application\json:emp_profile-config-200-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="post:\emp:application\json:emp_profile-config" />
@@ -112,7 +112,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
 			</munit-tools:verify-call>
         </munit:validation>
     </munit:test>
-    <munit:test name="post:\emp:application\json:emp_profile-config-400-application\json-FlowTest" description="Verifying functionality of [post:\emp:application\json:emp_profile-config-400-application\json]" timeOut="200000" ignore="true">
+    <munit:test name="post:\emp:application\json:emp_profile-config-400-application\json-FlowTest" description="Verifying functionality of [post:\emp:application\json:emp_profile-config-400-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="post:\emp:application\json:emp_profile-config" />
@@ -133,7 +133,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
             <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/post_400_emp_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="post:\emp:application\json:emp_profile-config-404-application\json-FlowTest" description="Verifying functionality of [post:\emp:application\json:emp_profile-config-404-application\json]" timeOut="200000" ignore="true">
+    <munit:test name="post:\emp:application\json:emp_profile-config-404-application\json-FlowTest" description="Verifying functionality of [post:\emp:application\json:emp_profile-config-404-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="post:\emp:application\json:emp_profile-config" />
@@ -154,7 +154,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
             <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/post_404_emp_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-	<munit:test name="post:\emp:application\json:emp_profile-config-405-application\json-FlowTest" description="Verifying functionality of [post:\emp:application\json:emp_profile-config-404-application\json]" timeOut="200000" ignore="true">
+	<munit:test name="post:\emp:application\json:emp_profile-config-405-application\json-FlowTest" description="Verifying functionality of [post:\emp:application\json:emp_profile-config-404-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="post:\emp:application\json:emp_profile-config" />
@@ -175,7 +175,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
             <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/post_405_emp_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-	<munit:test name="patch:\emp\(empId):application\json:emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [patch:\emp\(empId):application\json:emp_profile-config-200-application\json]" timeOut="200000" ignore="true">
+	<munit:test name="patch:\emp\(empId):application\json:emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [patch:\emp\(empId):application\json:emp_profile-config-200-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="patch:\emp\(empId):application\json:emp_profile-config" />
@@ -211,7 +211,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
 			</munit-tools:verify-call>
         </munit:validation>
     </munit:test>
-    <munit:test name="patch:\emp\(empId):application\json:emp_profile-config-400-application\json-FlowTest" description="Verifying functionality of [patch:\emp\(empId):application\json:emp_profile-config-400-application\json]" timeOut="200000" ignore="true">
+    <munit:test name="patch:\emp\(empId):application\json:emp_profile-config-400-application\json-FlowTest" description="Verifying functionality of [patch:\emp\(empId):application\json:emp_profile-config-400-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="patch:\emp\(empId):application\json:emp_profile-config" />
@@ -233,7 +233,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
             <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/patch_400_emp_{empid}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="patch:\emp\(empId):application\json:emp_profile-config-404-application\json-FlowTest" description="Verifying functionality of [patch:\emp\(empId):application\json:emp_profile-config-404-application\json]" ignore="true">
+    <munit:test name="patch:\emp\(empId):application\json:emp_profile-config-404-application\json-FlowTest" description="Verifying functionality of [patch:\emp\(empId):application\json:emp_profile-config-404-application\json]">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="patch:\emp\(empId):application\json:emp_profile-config" />
@@ -255,7 +255,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
             <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/patch_404_emp_{empid}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="patch:\emp\(empId):application\json:emp_profile-config-405-application\json-FlowTest" description="Verifying functionality of [patch:\emp\(empId):application\json:emp_profile-config-500-application\json]" timeOut="200000" ignore="true">
+    <munit:test name="patch:\emp\(empId):application\json:emp_profile-config-405-application\json-FlowTest" description="Verifying functionality of [patch:\emp\(empId):application\json:emp_profile-config-500-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="patch:\emp\(empId):application\json:emp_profile-config" />
@@ -277,7 +277,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
             <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/patch_405_emp_{empid}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\status:emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [get:\status:emp_profile-config-200-application\json]" timeOut="200000" ignore="true">
+    <munit:test name="get:\status:emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [get:\status:emp_profile-config-200-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="get:\status:emp_profile-config" />
@@ -292,7 +292,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
             <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_200_status_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\emp\(empId):emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [get:\emp\(empId):emp_profile-config-200-application\json]" timeOut="200000" ignore="true">
+    <munit:test name="get:\emp\(empId):emp_profile-config-200-application\json-FlowTest" description="Verifying functionality of [get:\emp\(empId):emp_profile-config-200-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="get:\emp\(empId):emp_profile-config" />
@@ -328,7 +328,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
 			</munit-tools:verify-call>
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\emp\(empId):emp_profile-config-404-application\json-FlowTest" description="Verifying functionality of [get:\emp\(empId):emp_profile-config-404-application\json]" timeOut="200000" ignore="true">
+    <munit:test name="get:\emp\(empId):emp_profile-config-404-application\json-FlowTest" description="Verifying functionality of [get:\emp\(empId):emp_profile-config-404-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="get:\emp\(empId):emp_profile-config" />
@@ -349,7 +349,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
             <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_404_emp_{empid}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\emp\(empId):emp_profile-config-405-application\json-FlowTest" description="Verifying functionality of [get:\emp\(empId):emp_profile-config-500-application\json]" timeOut="200000" ignore="true">
+    <munit:test name="get:\emp\(empId):emp_profile-config-405-application\json-FlowTest" description="Verifying functionality of [get:\emp\(empId):emp_profile-config-500-application\json]" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="get:\emp\(empId):emp_profile-config" />
@@ -370,7 +370,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
             <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_405_emp_{empid}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="ANY_ERROR_HANDLER" timeOut="200000" expectedErrorType="ANY" ignore="true">
+    <munit:test name="ANY_ERROR_HANDLER" timeOut="200000" expectedErrorType="ANY">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="get:\emp\(empId):emp_profile-config" />
@@ -392,7 +392,7 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
 			<munit-tools:assert-that expression="#[payload.code]" is="#[MunitTools::equalTo(500)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 500" />
         </munit:validation>
     </munit:test>
-    <munit:test name="APIKIT_CONSOLE" timeOut="200000" ignore="true">
+    <munit:test name="APIKIT_CONSOLE" timeOut="200000">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="emp_profile-main" />
             <munit:enable-flow-source value="get:\emp\(empId):emp_profile-config" />
