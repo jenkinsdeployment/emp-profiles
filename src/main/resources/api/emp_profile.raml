@@ -83,7 +83,22 @@ description: Employee profile management.
             application/json:
               description: This element will define status of failed messages.
               type: !include Error/error-dataType.raml
-              example: !include /Examples/error-500-response-example.json          
+              example: !include /Examples/error-500-response-example.json
+    
+    delete:
+      description: This API will delete specific employee profile from SFDC.
+      responses:
+        200:
+          body:
+            application/json:
+              type: !include /DataType/emp-post-dataType.raml
+              example: !include /Examples/post-200-response.json
+        404:
+          body:
+            application/json:
+              description: This element will define status of failed messages.
+              type: !include Error/error-dataType.raml
+              example: !include /Examples/error-404-response-example.json 
 
   post:
     description: This API will do employee registration to SFDC. 

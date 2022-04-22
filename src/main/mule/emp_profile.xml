@@ -175,4 +175,32 @@ output application/json
 		</ee:transform>
 		<error-handler ref="global_ErrorHandler" />
 	</flow>
+	<flow name="delete:\emp\(empId):emp_profile-config" doc:id="e5e90044-d4f9-4f61-a382-118727009c5f" >
+		<ee:transform doc:name="Transform Message" doc:id="43c6157c-ad16-4815-b21e-e3d1ca8bef7d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	Id : attributes.uriParams.empId
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:delete doc:name="Delete" doc:id="f069a5cb-29a1-457a-bb77-78ffd580856a" config-ref="Salesforce_Config">
+			<salesforce:ids ><![CDATA[#[[payload.Id]]]]></salesforce:ids>
+		</salesforce:delete>
+		<ee:transform doc:name="Transform Message" doc:id="3b394922-3323-479b-a4c3-db59c1a2dde0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  msg: "successful operation",
+  code: 200,
+  success: "true"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<error-handler ref="global_ErrorHandler" />
+	</flow>
 </mule>
