@@ -86,6 +86,7 @@ output application/json
 ---
 empList : payload map (item, index)->
 {
+  Id : item.Name,
   firstName : item.firstName__c,
   lastName : item.lastName__c,
   email : item.email__c,
@@ -115,6 +116,7 @@ Designation__c,Specialization__c from emp_profiles__c where name = ':empId']]></
 output application/json
 ---
 {
+  Id : payload[0].Name,
   firstName: payload[0].firstName__c,
   lastName: payload[0].lastName__c,
   email: payload[0].email__c,
