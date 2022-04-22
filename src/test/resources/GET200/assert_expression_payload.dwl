@@ -2,6 +2,7 @@
 import * from dw::test::Asserts
 ---
 payload must equalTo({
+  "Id": "A-0004", 	
   "firstName": "Z",
   "lastName": "A",
   "email": "abc@gmail.com",
