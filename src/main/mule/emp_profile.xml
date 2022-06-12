@@ -9,10 +9,10 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 	</apikit:config>
     <configuration doc:name="Configuration" doc:id="e6de957b-caa0-4da2-b79b-33e15efb7132" defaultErrorHandler-ref="global_ErrorHandler" />
 	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="81c32fff-c1f7-44d4-a641-aa5edce64851" >
-		<salesforce:basic-connection username="prajwal16mule@gmail.com" password="Morshi@2020" securityToken="ao1LyltCH10rw8iZh8Km9Lubq" />
+		<salesforce:basic-connection username="disguisedfox74@gmail.com" password="Morshi@2020" securityToken="r5p5FyYFWoFhTAUEjdiuzSH6" />
 	</salesforce:sfdc-config>
 	<configuration-properties doc:name="Configuration properties" doc:id="fcc4d96b-a76a-421a-96eb-4b2f61140edc" file="secure.yaml" />
-	<api-gateway:autodiscovery apiId="17730786" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="7d852406-268b-401b-87ca-9b5641bd1583" flowRef="emp_profile-main"/>
+	<api-gateway:autodiscovery apiId="17730786" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="b22835c1-ad26-4083-9942-50a1ce8bd15a" flowRef="emp_profile-main" />
 	<flow name="emp_profile-main" doc:id="375cfc8b-28ee-4168-bbcf-fd8dfb51abfc">
         <http:listener config-ref="emp_profile-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -59,7 +59,7 @@ output application/json
 }]]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<salesforce:upsert doc:name="Upsert" doc:id="28719cfb-82b0-4cbb-8ee7-77d25a8e21fc" config-ref="Salesforce_Config" objectType="emp_profiles__c" externalIdFieldName="Name"/>
+		<salesforce:upsert doc:name="Upsert" doc:id="28719cfb-82b0-4cbb-8ee7-77d25a8e21fc" config-ref="Salesforce_Config" objectType="emp_profile__c" externalIdFieldName="Name"/>
 		<ee:transform>
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -77,7 +77,7 @@ output application/json
     <flow name="get:\emp:emp_profile-config" doc:id="cd132d14-4750-4e77-bfb2-e7405d56b28b">
         <salesforce:query doc:name="Query" doc:id="1983b7ef-9b08-4605-9daf-469d8e4ce92b" config-ref="Salesforce_Config">
 			<salesforce:salesforce-query ><![CDATA[select Name,firstName__c,lastName__c,phoneNumber__c,email__c,country__c,city__c,
-Designation__c,Specialization__c from emp_profiles__c]]></salesforce:salesforce-query>
+Designation__c,Specialization__c from emp_profile__c]]></salesforce:salesforce-query>
 		</salesforce:query>
 		<ee:transform>
             <ee:message>
@@ -103,7 +103,7 @@ empList : payload map (item, index)->
     <flow name="get:\emp\(empId):emp_profile-config" doc:id="acc1fbfd-a104-4970-883f-7e3be00c755e">
         <salesforce:query doc:name="Query" doc:id="c5e0236b-1418-457c-af26-1f60898e9064" config-ref="Salesforce_Config">
 			<salesforce:salesforce-query ><![CDATA[select Name,firstName__c,lastName__c,phoneNumber__c,email__c,country__c,city__c,
-Designation__c,Specialization__c from emp_profiles__c where name = ':empId']]></salesforce:salesforce-query>
+Designation__c,Specialization__c from emp_profile__c where name = ':empId']]></salesforce:salesforce-query>
 			<salesforce:parameters ><![CDATA[#[output application/java
 ---
 {
@@ -148,7 +148,7 @@ output application/json
 }]]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<salesforce:create doc:name="Create" doc:id="c0a99324-8b96-4ae9-8396-e0cb9d1d9c5e" config-ref="Salesforce_Config" type="emp_profiles__c"/>
+		<salesforce:create doc:name="Create" doc:id="c0a99324-8b96-4ae9-8396-e0cb9d1d9c5e" config-ref="Salesforce_Config" type="emp_profile__c"/>
 		<ee:transform>
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
